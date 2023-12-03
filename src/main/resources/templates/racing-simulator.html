@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Racing Simulator - CS OOP Lab 2 Murtazin Rifat</title>
+
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        .note {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+        }
+        table {
+            width: 50%;
+            margin: 20px auto;
+            border: 2px solid #ddd;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        #raceType {
+            width: 150px;
+            display: block;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+
+        #distance {
+            width: 100px;
+            display: block;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+
+        #startButton {
+            display: block;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>Симулятор гонок</h1>
+
+
+<select id="raceType" name="raceType" required>
+    <option value="LAND_ONLY">Land</option>
+    <option value="AIR_ONLY">Air</option>
+    <option value="ALL_TYPES">All</option>
+</select>
+
+<table id="vehiclesTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Speed</th>
+            <th>Vehicle Type</th>
+            <th>Select</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+</table>
+
+<table id="raceResultsTable" style="display: none;">
+    <thead>
+        <tr>
+            <th>Vehicle ID</th>
+            <th>Distance</th>
+            <th>Vehicle Type</th>
+            <th>Current Result Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+</table>
+
+<h3>Задай дистанцию гонки:</h3>
+<input type="number" id="distance" name="distance" required min="0">
+<button id="startButton" onclick="startRace()">Start Race</button>
+
+<a href="http://127.0.0.1:8080/">
+    <button>⬅️ Go to back</button>
+</a>
+
+<script>
+    document.getElementById("raceType").addEventListener("change", function () {
+    getVehicles();});
+
+    function getVehicles() {
+        
+        var raceType = document.getElementById("raceType").value;
+
+        fetch(`http://127.0.0.1:8080/api/vehicles/type?type=${raceType}`)
+            .then(response => response.json())
+            .then(data => {
+                populateTable(data);
+                document.getElementById("raceResultsTable").style.display = "none";
+                document.getElementById("vehiclesTable").style.display = "table";
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function populateTable(vehicles) {
+        var tableBody = document.querySelector("#vehiclesTable tbody");
+
+        tableBody.innerHTML = '';
+
+        vehicles.forEach(vehicle => {
+            var row = tableBody.insertRow();
+            row.insertCell(0).textContent = vehicle.id;
+            row.insertCell(1).textContent = vehicle.speed;
+            row.insertCell(2).textContent = vehicle.vehicleType;
+
+            var checkboxCell = row.insertCell(3);
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkboxCell.appendChild(checkbox);
+        });
+    }
+
+    function startRace() {
+      var distance = document.getElementById("distance").value;
+
+      if (parseFloat(distance) < 0) {
+          alert("Please enter a positive number for distance.");
+          return;
+      }
+
+      var checkboxes = document.querySelectorAll('#vehiclesTable tbody input[type="checkbox"]:checked');
+      var selectedVehicles = Array.from(checkboxes).map(checkbox => parseInt(checkbox.closest('tr').cells[0].textContent));
+
+      var raceType = document.getElementById("raceType").value;
+
+      var requestBody = {
+          "vehicles": selectedVehicles,
+          "distance": parseFloat(distance),
+          "raceType": raceType
+      };
+
+      fetch('http://127.0.0.1:8080/races/start', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+      })
+      .then(response => response.json())
+      .then(data => {
+          populateRaceResultsTable(data);
+          document.getElementById("vehiclesTable").style.display = "none";
+          document.getElementById("raceResultsTable").style.display = "table";
+      })
+      .catch(error => console.error('Error:', error));
+    }
+
+    function populateRaceResultsTable(results) {
+        var tableBody = document.querySelector("#raceResultsTable tbody");
+
+        tableBody.innerHTML = '';
+
+        results.forEach(result => {
+            var row = tableBody.insertRow();
+            row.insertCell(0).textContent = result.vehicleId;
+            row.insertCell(1).textContent = result.distance;
+            row.insertCell(2).textContent = result.vehicleType;
+            row.insertCell(3).textContent = result.currentResultTime;
+        });
+    }
+
+</script>
+
+</body>
+</html>

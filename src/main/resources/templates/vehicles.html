@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle List - CS OOP Lab 2 Murtazin Rifat</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .note {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+        }
+        table {
+            width: 50%;
+            margin: 20px auto;
+            border: 2px solid #ddd;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список всех транспортных средств в базе данных</h1>
+    <h2>Наземные транспортные средства</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Скорость</th>
+            <th>Время движения до отдыха</th>
+            <th>Название транспортного средства</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="landVehicle : ${landVehicles}">
+            <td th:text="${landVehicle.id}"></td>
+            <td th:text="${landVehicle.speed}"></td>
+            <td th:text="${landVehicle.moveTimeBeforeRest}"></td>
+            <td th:text="${landVehicle.vehicleType}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Воздушные транспортные средства</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Скорость</th>
+            <th>Название транспортного средства</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="airVehicle : ${airVehicles}">
+            <td th:text="${airVehicle.id}"></td>
+            <td th:text="${airVehicle.speed}"></td>
+            <td th:text="${airVehicle.vehicleType}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="http://127.0.0.1:8080/">
+        <button>⬅️ Go to back</button>
+    </a>
+
+    <p class="note">
+        ITMO University<br>
+        Saint Petersburg Autumn 2023
+    </p>
+</body>
+</html>
