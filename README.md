@@ -104,29 +104,3 @@ Open browser and go to http://localhost:8080
     ITMO University<br>
     Saint Petersburg Autumn 2023
 </p>
-
-<style>
-    body {
-        font-family: 'Times New Roman', serif;
-        line-height: 1.6;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    h1 {
-        text-align: center;
-        color: #333;
-    }
-    p {
-        text-indent: 1.5em;
-    }
-    .ascii-art {
-        font-family: 'Courier New', monospace;
-        white-space: pre;
-    }
-    .note {
-        text-align: center;
-        font-style: italic;
-        color: #777;
-    }
-</style>
