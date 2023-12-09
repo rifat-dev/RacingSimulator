@@ -46,7 +46,13 @@ cd racingSimulator
 # Step 3: Running container
 docker-compose up -d
 
-# Step *: Access the application
+# Step 4: Enable execution
+chmod +x addNewVehicleToDB.sh
+
+# Step 5: Run script
+./addNewVehicleToDB.sh
+
+# Step 6: Access the application
 Open browser and go to http://localhost:8080
 ```
 
