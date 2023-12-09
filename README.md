@@ -43,8 +43,8 @@ git clone git@github.com:rifat-dev/racingSimulator.git
 # Step 2: Navigate to the project directory
 cd racingSimulator
 
-# Step 3: 
-...
+# Step 3: Running container
+docker-compose up -d
 
 # Step *: Access the application
 Open browser and go to http://localhost:8080
