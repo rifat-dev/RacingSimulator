@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  racesimulator-postgres:
+    image: postgres
+    container_name: racesimulator-postgres-com
+    environment:
+      POSTGRES_PASSWORD: rifat
+      POSTGRES_DB: racesimulator
+    ports:
+      - "5436:5432"
+
+  racesimulator-app:
+    image: rifatmrt/racing-simulator-docker-lab2
+    container_name: racesimulator-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://racesimulator-postgres-com:5432/racesimulator
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: rifat
+    ports:
+      - "8080:8080"
+    depends_on:
+      - racesimulator-postgres
